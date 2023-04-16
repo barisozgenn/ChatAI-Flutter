@@ -65,9 +65,9 @@ flutter:
      - assets/images/
      - assets/sounds/
 
-  #fonts
+#fonts
 
-   fonts:
+  fonts:
      - family: Cera Pro
        fonts:
          - asset: assets/fonts/Cera-Pro-Bold.otf
