@@ -50,8 +50,10 @@ class _HomePageState extends State<HomePage> {
             margin: const EdgeInsets.symmetric(
               horizontal: 29,
             ).copyWith(top: 14),
-            decoration:
-                BoxDecoration(border: Border.all(color: Pallete.borderColor)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Pallete.borderColor),
+                borderRadius:
+                    BorderRadius.circular(14).copyWith(topLeft: Radius.zero)),
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 9.0),
               child: Text(
@@ -61,6 +63,20 @@ class _HomePageState extends State<HomePage> {
                     color: Pallete.mainFontColor,
                     fontSize: 24),
               ),
+            ),
+          ),
+// features list
+          Container(
+            padding: const EdgeInsets.all(14),
+            alignment: Alignment.centerLeft,
+            margin: const EdgeInsets.only(top: 14.0, left: 14, right: 14),
+            child: const Text(
+              'Discover Your Possibilities with Our Features!',
+              style: TextStyle(
+                  fontFamily: 'Cera Pro',
+                  color: Pallete.mainFontColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold),
             ),
           )
         ],
