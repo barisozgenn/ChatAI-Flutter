@@ -9,7 +9,14 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+
 class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +42,7 @@ class _HomePageState extends State<HomePage> {
                     width: 129,
                     margin: const EdgeInsets.only(top: 7),
                     decoration: const BoxDecoration(
-                        color: Pallete.assistantCircleColor,
+                        color: Pallete.firstAssistantCircleColor,
                         shape: BoxShape.circle),
                   ),
                 ),
@@ -130,6 +137,12 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
+      ),
+// mic button
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Pallete.secondAssistantCircleColor,
+        child: const Icon(Icons.mic, color: Color.fromARGB(255, 255, 255, 255)),
       ),
     );
   }
