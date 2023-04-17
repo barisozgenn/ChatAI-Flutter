@@ -19,8 +19,8 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       body: DecoratedBox(
-        decoration: BoxDecoration(
-            image: const DecorationImage(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
                 image: AssetImage('assets/images/bakcgroundSeamless.png'),
                 fit: BoxFit.cover,
                 opacity: 0.5)),
@@ -62,8 +62,8 @@ class _HomePageState extends State<HomePage> {
                   borderRadius:
                       BorderRadius.circular(14).copyWith(topLeft: Radius.zero)),
               child: Column(
-                children: [
-                  const Padding(
+                children: const [
+                  Padding(
                     padding: EdgeInsets.only(left: 7, top: 14, bottom: 0),
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(left: 7, bottom: 14, top: 0),
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -107,20 +107,20 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Column(
-              children: [
-                const FeatureListItem(
+              children: const [
+                FeatureListItem(
                   backgroundColor: Pallete.firstListItemColor,
                   titleText: 'ChatGPT Text',
                   descriptionText:
                       'Unlock your potential with ChatGPT: The smarter way to stay organized and informed.',
                 ),
-                const FeatureListItem(
+                FeatureListItem(
                   backgroundColor: Pallete.secondListItemColor,
                   titleText: 'Dall-E Image',
                   descriptionText:
                       'Unleash your creativity with Dall-E\'s personal assistant: Inspire and create effortlessly.',
                 ),
-                const FeatureListItem(
+                FeatureListItem(
                   backgroundColor: Pallete.thirdListItemColor,
                   titleText: 'Future of Voice Assistance',
                   descriptionText:

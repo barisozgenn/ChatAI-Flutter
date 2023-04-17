@@ -38,13 +38,19 @@ class FeatureListItem extends StatelessWidget {
           const SizedBox(
             height: 7,
           ),
-          Padding(
-            padding: const EdgeInsets.all(14.0).copyWith(top: 0),
-            child: Text(descriptionText,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(14.0).copyWith(top: 0, right: 29),
+              child: Text(
+                descriptionText,
                 style: const TextStyle(
                     fontFamily: 'Cera Pro',
                     color: Pallete.blackColor,
-                    fontWeight: FontWeight.w500)),
+                    fontWeight: FontWeight.w500),
+                textAlign: TextAlign.left,
+              ),
+            ),
           )
         ],
       ),
