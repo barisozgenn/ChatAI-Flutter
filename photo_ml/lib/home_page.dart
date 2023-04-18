@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_ml/feature_list_item.dart';
 import 'package:photo_ml/theme/pallette.dart';
@@ -182,6 +183,9 @@ class _HomePageState extends State<HomePage> {
 // mic button
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          if (kDebugMode) {
+            print('status:${speechToText.isListening.toString()}');
+          }
           if (await speechToText.hasPermission && speechToText.isNotListening) {
             await startListening();
           } else if (speechToText.isListening) {
