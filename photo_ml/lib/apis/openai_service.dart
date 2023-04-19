@@ -27,11 +27,21 @@ class OpenAIAPI {
       if (kDebugMode) {
         print(res.body);
         if (res.statusCode == 200) {
-          print('GOOOOOD Baris!');
+          String resContent =
+              jsonDecode(res.body)['choices'][0]['message']['content'];
+          resContent = resContent.trim();
+          switch (resContent.toLowerCase()) {
+            case 'yes':
+            case 'yes.':
+              final apiRes = await dallEAPI(prompt);
+              return apiRes;
+            default:
+              return await chatGPTAPI(prompt);
+          }
         }
       }
 
-      return 'Try Run';
+      return 'Some errors occured! Baris';
     } catch (ex) {
       return ex.toString();
     }
