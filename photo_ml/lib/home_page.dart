@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_ml/apis/openai_service.dart';
 import 'package:photo_ml/feature_list_item.dart';
 import 'package:photo_ml/theme/pallette.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final OpenAIAPI openAIAPI = OpenAIAPI();
   final speechToText = SpeechToText();
   String lastWords = '';
 
@@ -38,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
   Future<void> stopListening() async {
+    await openAIAPI.isImagePromptAPI(lastWords);
     await speechToText.stop();
     setState(() {});
   }
