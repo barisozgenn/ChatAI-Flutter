@@ -91,6 +91,37 @@ class OpenAIAPI {
   }
 
   Future<String> dallEAPI(String prompt) async {
-    return 'dallE';
+    messages.add({
+      'role': 'user',
+      'content': prompt,
+    });
+    try {
+      final res = await http.post(
+        Uri.parse(openAIImageAPIURL),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $openAIAPIKey',
+        },
+        body: jsonEncode({
+          'prompt': prompt,
+          'n': 1,
+        }),
+      );
+      if (res.statusCode == 200) {
+        String resImageUrl = jsonDecode(res.body)['data'][0]['url'];
+        resImageUrl = resImageUrl.trim();
+
+        messages.add({
+          'role': 'assistant',
+          'content': resImageUrl,
+        });
+
+        return resImageUrl;
+      }
+
+      return 'Some errors occured! Baris';
+    } catch (ex) {
+      return ex.toString();
+    }
   }
 }
