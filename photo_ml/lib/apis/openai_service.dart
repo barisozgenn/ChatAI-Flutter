@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants/secrets.dart';
@@ -23,10 +24,13 @@ class OpenAIAPI {
           ]
         }),
       );
-      print(res.body);
-      if (res.statusCode == 200) {
-        print('GOOOOOD Baris!');
+      if (kDebugMode) {
+        print(res.body);
+        if (res.statusCode == 200) {
+          print('GOOOOOD Baris!');
+        }
       }
+
       return 'Try Run';
     } catch (ex) {
       return ex.toString();
