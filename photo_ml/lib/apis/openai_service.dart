@@ -3,13 +3,15 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import '../constants/secrets.dart';
+import '../constants/constants.dart';
 
 class OpenAIAPI {
+  final List<Map<String, String>> messages = [];
+
   Future<String> isImagePromptAPI(String prompt) async {
     try {
       final res = await http.post(
-        Uri.parse('https://api.openai.com/v1/chat/completions'),
+        Uri.parse(openAIAPIURL),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $openAIAPIKey',
@@ -48,7 +50,44 @@ class OpenAIAPI {
   }
 
   Future<String> chatGPTAPI(String prompt) async {
-    return 'chatGPT';
+    messages.add({
+      'role': 'user',
+      'content': prompt,
+    });
+    try {
+      final res = await http.post(
+        Uri.parse(openAIAPIURL),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $openAIAPIKey',
+        },
+        body: jsonEncode({
+          "model": "gpt-3.5-turbo",
+          "messages": [
+            {
+              'role': 'user',
+              'content': messages,
+            }
+          ]
+        }),
+      );
+      if (res.statusCode == 200) {
+        String resContent =
+            jsonDecode(res.body)['choices'][0]['message']['content'];
+        resContent = resContent.trim();
+
+        messages.add({
+          'role': 'assistant',
+          'content': resContent,
+        });
+
+        return resContent;
+      }
+
+      return 'Some errors occured! Baris';
+    } catch (ex) {
+      return ex.toString();
+    }
   }
 
   Future<String> dallEAPI(String prompt) async {

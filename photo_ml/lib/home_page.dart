@@ -40,7 +40,8 @@ class _HomePageState extends State<HomePage> {
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
   Future<void> stopListening() async {
-    await openAIAPI.isImagePromptAPI(lastWords);
+    final speechRes = await openAIAPI.isImagePromptAPI(lastWords);
+    print(speechRes);
     await speechToText.stop();
     setState(() {});
   }
