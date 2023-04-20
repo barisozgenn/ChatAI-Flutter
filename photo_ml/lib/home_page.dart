@@ -23,7 +23,6 @@ class _HomePageState extends State<HomePage> {
   String lastWords = '';
   String? generatedContent;
   String? generatedImageUrl;
-  bool isMicListening = false;
 
   @override
   void initState() {
@@ -40,7 +39,6 @@ class _HomePageState extends State<HomePage> {
 // Each time to start a speech recognition session
   Future<void> startListening() async {
     await speechToText.listen(onResult: onSpeechResult);
-    isMicListening = true;
 
     setState(() {});
   }
@@ -50,7 +48,6 @@ class _HomePageState extends State<HomePage> {
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
   Future<void> stopListening() async {
-    isMicListening = false;
     final speechRes = await openAIAPI.isImagePromptAPI(lastWords);
     print(speechRes);
     await speechToText.stop();
@@ -173,7 +170,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                       // image generated
                       if (generatedImageUrl != null)
-                        Image.network(generatedImageUrl!),
+                        Padding(
+                          padding: const EdgeInsets.all(7.0),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: Image.network(generatedImageUrl!)),
+                        ),
                     ],
                   ),
                 ),
@@ -252,7 +254,7 @@ class _HomePageState extends State<HomePage> {
         },
         backgroundColor: Pallete.secondAssistantCircleColor,
         child: Icon(
-            isMicListening == true ? Icons.stop_circle_rounded : Icons.mic,
+            speechToText.isListening ? Icons.stop_circle_rounded : Icons.mic,
             color: const Color.fromARGB(255, 255, 255, 255)),
       ),
     );

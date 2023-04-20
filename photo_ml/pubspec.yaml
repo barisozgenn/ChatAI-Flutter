@@ -38,6 +38,7 @@ dependencies:
   speech_to_text: ^6.1.1
   http: ^0.13.5
   flutter_tts: ^3.6.3
+  animate_do: ^3.0.2
 
 dev_dependencies:
   flutter_test:
