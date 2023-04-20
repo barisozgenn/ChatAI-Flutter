@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:photo_ml/apis/openai_service.dart';
 import 'package:photo_ml/feature_list_item.dart';
 import 'package:photo_ml/theme/pallette.dart';
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final OpenAIAPI openAIAPI = OpenAIAPI();
   final speechToText = SpeechToText();
+  final flutterTts = FlutterTts();
   String lastWords = '';
 
   @override
