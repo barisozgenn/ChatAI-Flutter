@@ -138,11 +138,11 @@ class _HomePageState extends State<HomePage> {
                         child: Text(
                           generatedContent == null
                               ? 'What can I do for you today?'
-                              : 'Your Personal AI Assistant',
-                          style: const TextStyle(
+                              : '👤: $lastWords',
+                          style: TextStyle(
                               fontFamily: 'Cera Pro',
                               color: Pallete.mainFontColor,
-                              fontSize: 14),
+                              fontSize: generatedContent == null ? 14 : 12),
                         ),
                       ),
                     ),
@@ -154,11 +154,11 @@ class _HomePageState extends State<HomePage> {
                         child: Text(
                           generatedContent == null
                               ? 'Your Personal AI Assistant'
-                              : generatedContent!,
+                              : '🤖: ${generatedContent!}',
                           style: TextStyle(
                               fontFamily: 'Cera Pro',
                               color: Pallete.mainFontColor,
-                              fontSize: generatedContent == null ? 24 : 17),
+                              fontSize: generatedContent == null ? 24 : 14),
                         ),
                       ),
                     ),
