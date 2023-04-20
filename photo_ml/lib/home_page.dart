@@ -19,11 +19,14 @@ class _HomePageState extends State<HomePage> {
   final speechToText = SpeechToText();
   final flutterTts = FlutterTts();
   String lastWords = '';
+  String? generatedContent;
+  String? generatedImageUrl;
 
   @override
   void initState() {
     super.initState();
     initSpeechToText();
+    initTextToSpeech();
   }
 
   Future<void> initSpeechToText() async {
@@ -56,10 +59,20 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> initTextToSpeech() async {
+    await flutterTts.setSharedInstance(true);
+    setState(() {});
+  }
+
+  Future<void> setSpeak(String content) async {
+    await flutterTts.speak(content);
+  }
+
   @override
   void dispose() {
     super.dispose();
     speechToText.stop();
+    flutterTts.stop();
   }
 
   @override
@@ -116,14 +129,17 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(14)
                         .copyWith(topLeft: Radius.zero)),
                 child: Column(
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 7, top: 14, bottom: 0),
+                      padding:
+                          const EdgeInsets.only(left: 7, top: 14, bottom: 0),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'What can I do for you today?',
-                          style: TextStyle(
+                          generatedContent == null
+                              ? 'What can I do for you today?'
+                              : 'Your Personal AI Assistant',
+                          style: const TextStyle(
                               fontFamily: 'Cera Pro',
                               color: Pallete.mainFontColor,
                               fontSize: 14),
@@ -131,15 +147,18 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 7, bottom: 14, top: 0),
+                      padding:
+                          const EdgeInsets.only(left: 7, bottom: 14, top: 0),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Your Personal AI Assistant',
+                          generatedContent == null
+                              ? 'Your Personal AI Assistant'
+                              : generatedContent!,
                           style: TextStyle(
                               fontFamily: 'Cera Pro',
                               color: Pallete.mainFontColor,
-                              fontSize: 24),
+                              fontSize: generatedContent == null ? 24 : 17),
                         ),
                       ),
                     ),
@@ -195,6 +214,17 @@ class _HomePageState extends State<HomePage> {
           if (await speechToText.hasPermission && speechToText.isNotListening) {
             await startListening();
           } else if (speechToText.isListening) {
+            final speechRes = await openAIAPI.isImagePromptAPI(lastWords);
+            if (speechRes.contains('http')) {
+              generatedImageUrl = speechRes;
+              generatedContent = null;
+              setState(() {});
+            } else {
+              generatedContent = speechRes;
+              generatedImageUrl = null;
+              setState(() {});
+              await setSpeak(speechRes);
+            }
             await stopListening();
           } else {
             initSpeechToText();
