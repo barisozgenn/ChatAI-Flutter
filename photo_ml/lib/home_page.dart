@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:photo_ml/apis/openai_service.dart';
 import 'package:photo_ml/feature_list_item.dart';
+import 'package:photo_ml/message_baloon.dart';
 import 'package:photo_ml/theme/pallette.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -261,7 +262,15 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                  )
+                  ),
+                  const MessageBaloon(
+                      backgroundColor: Pallete.whiteColor,
+                      text: "text",
+                      isAI: false),
+                  const MessageBaloon(
+                      backgroundColor: Pallete.whiteColor,
+                      text: "text",
+                      isAI: true),
                 ],
               ),
             ),
