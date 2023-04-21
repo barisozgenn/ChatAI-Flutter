@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   String lastWords = '';
   String? generatedContent;
   String? generatedImageUrl;
-
+  String? searchText;
   int animDelay = 129;
 
   @override
@@ -73,9 +73,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    super.dispose();
     speechToText.stop();
     flutterTts.stop();
+    super.dispose();
   }
 
   @override
@@ -272,6 +272,11 @@ class _HomePageState extends State<HomePage> {
                 margin: const EdgeInsets.symmetric(horizontal: 16)
                     .copyWith(bottom: 45),
                 child: TextFormField(
+                  onChanged: (text) {
+                    setState(() {
+                      searchText = text;
+                    });
+                  },
                   autocorrect: false,
                   keyboardType: TextInputType.text,
                   autofocus: false,
@@ -308,29 +313,51 @@ class _HomePageState extends State<HomePage> {
         delay: Duration(milliseconds: animDelay * 4),
         child: FloatingActionButton(
           onPressed: () async {
-            if (await speechToText.hasPermission &&
-                speechToText.isNotListening) {
-              await startListening();
-            } else if (speechToText.isListening) {
-              final speechRes = await openAIAPI.isImagePromptAPI(lastWords);
-              if (speechRes.contains('http')) {
-                generatedImageUrl = speechRes;
+            if (searchText.toString().isNotEmpty && searchText != null) {
+              final searchTextRes =
+                  await openAIAPI.isImagePromptAPI(searchText!);
+              if (searchTextRes.contains('http')) {
+                generatedImageUrl = searchTextRes;
                 generatedContent = null;
                 setState(() {});
               } else {
-                generatedContent = speechRes;
+                generatedContent = searchTextRes;
                 generatedImageUrl = null;
                 setState(() {});
-                await setSpeak(speechRes);
+                await setSpeak(searchTextRes);
               }
-              await stopListening();
+              setState(() {
+                searchText = '';
+              });
             } else {
-              initSpeechToText();
+              if (await speechToText.hasPermission &&
+                  speechToText.isNotListening) {
+                await startListening();
+              } else if (speechToText.isListening) {
+                final speechRes = await openAIAPI.isImagePromptAPI(lastWords);
+                if (speechRes.contains('http')) {
+                  generatedImageUrl = speechRes;
+                  generatedContent = null;
+                  setState(() {});
+                } else {
+                  generatedContent = speechRes;
+                  generatedImageUrl = null;
+                  setState(() {});
+                  await setSpeak(speechRes);
+                }
+                await stopListening();
+              } else {
+                initSpeechToText();
+              }
             }
           },
           backgroundColor: Pallete.secondAssistantCircleColor,
           child: Icon(
-              speechToText.isListening ? Icons.stop_circle_rounded : Icons.mic,
+              (searchText.toString().isNotEmpty && searchText != null)
+                  ? Icons.send
+                  : speechToText.isListening
+                      ? Icons.stop_circle_rounded
+                      : Icons.mic,
               color: const Color.fromARGB(255, 255, 255, 255)),
         ),
       ),
