@@ -14,10 +14,11 @@ class FeatureListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 29.0, vertical: 7),
+      margin: const EdgeInsets.only(bottom: 7).copyWith(right: 7),
       decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: const BorderRadius.all(Radius.circular(4))),
+          borderRadius: BorderRadius.circular(14).copyWith(
+              bottomLeft: Radius.zero, topLeft: const Radius.circular(29))),
       child: Column(
         children: [
           Padding(
@@ -46,6 +47,7 @@ class FeatureListItem extends StatelessWidget {
                 descriptionText,
                 style: const TextStyle(
                     fontFamily: 'Cera Pro',
+                    fontSize: 14,
                     color: Pallete.blackColor,
                     fontWeight: FontWeight.w500),
                 textAlign: TextAlign.left,
