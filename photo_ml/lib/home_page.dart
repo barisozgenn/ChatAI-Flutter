@@ -124,142 +124,183 @@ class _HomePageState extends State<HomePage> {
                 image: AssetImage('assets/images/bakcgroundSeamless.png'),
                 fit: BoxFit.cover,
                 opacity: 0.5)),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // chat buble Container
-              FadeInRight(
-                child: Visibility(
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                    ).copyWith(top: 29, right: 34),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Pallete.borderColor),
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(14).copyWith(
-                            bottomLeft: Radius.zero,
-                            topLeft: const Radius.circular(29))),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 7,
-                            top: 14,
-                            bottom: 0,
-                          ),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              generatedContent == null
-                                  ? 'What can I do for you today?'
-                                  : '👤: $lastWords',
-                              style: TextStyle(
-                                  fontFamily: 'Cera Pro',
-                                  color: Pallete.mainFontColor,
-                                  fontSize: generatedContent == null ? 14 : 12),
-                            ),
-                          ),
-                        ),
-                        if (generatedImageUrl == null)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 7, bottom: 14, top: 0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                generatedContent == null
-                                    ? 'Your Personal AI Assistant'
-                                    : '🤖: ${generatedContent!}',
-                                style: TextStyle(
-                                    fontFamily: 'Cera Pro',
-                                    color: Pallete.mainFontColor,
-                                    fontSize:
-                                        generatedContent == null ? 24 : 14),
+        child: Column(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  // chat buble Container
+                  FadeInRight(
+                    child: Visibility(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 7),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                        ).copyWith(top: 29, right: 34),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Pallete.borderColor),
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(14).copyWith(
+                                bottomLeft: Radius.zero,
+                                topLeft: const Radius.circular(29))),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 7,
+                                top: 14,
+                                bottom: 0,
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  generatedContent == null
+                                      ? 'What can I do for you today?'
+                                      : '👤: $lastWords',
+                                  style: TextStyle(
+                                      fontFamily: 'Cera Pro',
+                                      color: Pallete.mainFontColor,
+                                      fontSize:
+                                          generatedContent == null ? 14 : 12),
+                                ),
                               ),
                             ),
-                          ),
-                        // image generated
-                        if (generatedImageUrl != null)
-                          Padding(
-                            padding: const EdgeInsets.all(7.0),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(4),
-                                child: Image.network(generatedImageUrl!)),
-                          ),
-                      ],
+                            if (generatedImageUrl == null)
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 7, bottom: 14, top: 0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    generatedContent == null
+                                        ? 'Your Personal AI Assistant'
+                                        : '🤖: ${generatedContent!}',
+                                    style: TextStyle(
+                                        fontFamily: 'Cera Pro',
+                                        color: Pallete.mainFontColor,
+                                        fontSize:
+                                            generatedContent == null ? 24 : 14),
+                                  ),
+                                ),
+                              ),
+                            // image generated
+                            if (generatedImageUrl != null)
+                              Padding(
+                                padding: const EdgeInsets.all(7.0),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child: Image.network(generatedImageUrl!)),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              // features list
-              SlideInRight(
-                child: Visibility(
-                  visible:
-                      (generatedContent != null || generatedImageUrl != null)
+                  // features list
+                  SlideInRight(
+                    child: Visibility(
+                      visible: (generatedContent != null ||
+                              generatedImageUrl != null)
                           ? false
                           : true,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 7, horizontal: 14),
-                    alignment: Alignment.centerLeft,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 7, horizontal: 14),
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.only(
+                            top: 14.0, right: 58, left: 14),
+                        child: const Text(
+                          'Discover your possibilities with my features!',
+                          style: TextStyle(
+                              fontFamily: 'Cera Pro',
+                              color: Pallete.mainFontColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
                     margin:
                         const EdgeInsets.only(top: 14.0, right: 58, left: 14),
-                    child: const Text(
-                      'Discover your possibilities with my features!',
-                      style: TextStyle(
-                          fontFamily: 'Cera Pro',
-                          color: Pallete.mainFontColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),
+                    child: Visibility(
+                      visible: (generatedContent != null ||
+                              generatedImageUrl != null)
+                          ? false
+                          : true,
+                      child: Column(
+                        children: [
+                          FadeInRight(
+                            delay: Duration(milliseconds: animDelay),
+                            child: const FeatureListItem(
+                              backgroundColor: Pallete.firstListItemColor,
+                              titleText: 'ChatGPT Text',
+                              descriptionText:
+                                  'Unlock your potential with ChatGPT: The smarter way to stay organized and informed.',
+                            ),
+                          ),
+                          FadeInRight(
+                            delay: Duration(milliseconds: animDelay * 2),
+                            child: const FeatureListItem(
+                              backgroundColor: Pallete.secondListItemColor,
+                              titleText: 'Dall-E Image',
+                              descriptionText:
+                                  'Unleash your creativity with Dall-E\'s personal assistant: Inspire and create effortlessly.',
+                            ),
+                          ),
+                          FadeInRight(
+                            delay: Duration(milliseconds: animDelay * 3),
+                            child: const FeatureListItem(
+                              backgroundColor: Pallete.thirdListItemColor,
+                              titleText: 'Future of Voice Assistance',
+                              descriptionText:
+                                  'Experience the perfect blend of intelligence and imagination with Dall-E and ChatGPT.',
+                            ),
+                          )
+                        ],
+                      ),
                     ),
+                  )
+                ],
+              ),
+            ),
+            const Spacer(),
+            BounceInRight(
+              delay: Duration(milliseconds: animDelay * 4),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16)
+                    .copyWith(bottom: 45),
+                child: TextFormField(
+                  autocorrect: false,
+                  keyboardType: TextInputType.text,
+                  autofocus: false,
+                  decoration: const InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.0),
+                    filled: true,
+                    labelText: "Chat with me",
+                    labelStyle: TextStyle(
+                        fontSize: 16.0,
+                        fontFamily: 'Cera Pro',
+                        color: Pallete.secondAssistantCircleColor),
+                    fillColor: Pallete.whiteColor,
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderSide: BorderSide(
+                            color: Pallete.secondAssistantCircleColor)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderSide: BorderSide(
+                            color: Pallete.secondAssistantCircleColor)),
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 14.0, right: 58, left: 14),
-                child: Visibility(
-                  visible:
-                      (generatedContent != null || generatedImageUrl != null)
-                          ? false
-                          : true,
-                  child: Column(
-                    children: [
-                      FadeInRight(
-                        delay: Duration(milliseconds: animDelay),
-                        child: const FeatureListItem(
-                          backgroundColor: Pallete.firstListItemColor,
-                          titleText: 'ChatGPT Text',
-                          descriptionText:
-                              'Unlock your potential with ChatGPT: The smarter way to stay organized and informed.',
-                        ),
-                      ),
-                      FadeInRight(
-                        delay: Duration(milliseconds: animDelay * 2),
-                        child: const FeatureListItem(
-                          backgroundColor: Pallete.secondListItemColor,
-                          titleText: 'Dall-E Image',
-                          descriptionText:
-                              'Unleash your creativity with Dall-E\'s personal assistant: Inspire and create effortlessly.',
-                        ),
-                      ),
-                      FadeInRight(
-                        delay: Duration(milliseconds: animDelay * 3),
-                        child: const FeatureListItem(
-                          backgroundColor: Pallete.thirdListItemColor,
-                          titleText: 'Future of Voice Assistance',
-                          descriptionText:
-                              'Experience the perfect blend of intelligence and imagination with Dall-E and ChatGPT.',
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 5,
+            )
+          ],
         ),
       ),
 // mic button
