@@ -125,9 +125,10 @@ class _HomePageState extends State<HomePage> {
                 image: AssetImage('assets/images/bakcgroundSeamless.png'),
                 fit: BoxFit.cover,
                 opacity: 0.5)),
-        child: Column(
+        child: Stack(
           children: [
             SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 129),
               child: Column(
                 children: [
                   // chat buble Container
@@ -258,28 +259,37 @@ class _HomePageState extends State<HomePage> {
                               descriptionText:
                                   'Experience the perfect blend of intelligence and imagination with Dall-E and ChatGPT.',
                             ),
-                          )
+                          ),
+                          const MessageBaloon(
+                              backgroundColor: Pallete.whiteColor,
+                              text: "text",
+                              isAI: false),
+                          const MessageBaloon(
+                              backgroundColor: Pallete.whiteColor,
+                              text: "text",
+                              isAI: true),
+                          const MessageBaloon(
+                              backgroundColor: Pallete.whiteColor,
+                              text: "text",
+                              isAI: false),
+                          const MessageBaloon(
+                              backgroundColor: Pallete.whiteColor,
+                              text: "text",
+                              isAI: true),
                         ],
                       ),
                     ),
                   ),
-                  const MessageBaloon(
-                      backgroundColor: Pallete.whiteColor,
-                      text: "text",
-                      isAI: false),
-                  const MessageBaloon(
-                      backgroundColor: Pallete.whiteColor,
-                      text: "text",
-                      isAI: true),
                 ],
               ),
             ),
-            const Spacer(),
+            // Search Box
             BounceInRight(
               delay: Duration(milliseconds: animDelay * 4),
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16)
-                    .copyWith(bottom: 45),
+                    .copyWith(bottom: 50),
+                alignment: Alignment.bottomCenter,
                 child: TextFormField(
                   onChanged: (text) {
                     setState(() {
@@ -311,9 +321,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 5,
-            )
           ],
         ),
       ),
