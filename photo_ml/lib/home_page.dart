@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   String? generatedImageUrl;
   String? searchText;
   int animDelay = 129;
+  List<MessageBaloon> messageList = <MessageBaloon>[];
 
   @override
   void initState() {
@@ -225,7 +226,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Container(
                     margin:
-                        const EdgeInsets.only(top: 14.0, right: 58, left: 14),
+                        const EdgeInsets.only(top: 14.0, right: 14, left: 14),
                     child: Visibility(
                       visible: (generatedContent != null ||
                               generatedImageUrl != null)
@@ -251,31 +252,9 @@ class _HomePageState extends State<HomePage> {
                                   'Unleash your creativity with Dall-E\'s personal assistant: Inspire and create effortlessly.',
                             ),
                           ),
-                          FadeInRight(
-                            delay: Duration(milliseconds: animDelay * 3),
-                            child: const FeatureListItem(
-                              backgroundColor: Pallete.thirdListItemColor,
-                              titleText: 'Future of Voice Assistance',
-                              descriptionText:
-                                  'Experience the perfect blend of intelligence and imagination with Dall-E and ChatGPT.',
-                            ),
-                          ),
-                          const MessageBaloon(
-                              backgroundColor: Pallete.whiteColor,
-                              text: "text",
-                              isAI: false),
-                          const MessageBaloon(
-                              backgroundColor: Pallete.whiteColor,
-                              text: "text",
-                              isAI: true),
-                          const MessageBaloon(
-                              backgroundColor: Pallete.whiteColor,
-                              text: "text",
-                              isAI: false),
-                          const MessageBaloon(
-                              backgroundColor: Pallete.whiteColor,
-                              text: "text",
-                              isAI: true),
+                          Column(
+                            children: messageList,
+                          )
                         ],
                       ),
                     ),
@@ -330,7 +309,15 @@ class _HomePageState extends State<HomePage> {
         child: FloatingActionButton(
           onPressed: () async {
             if (searchText.toString().isNotEmpty && searchText != null) {
-              final searchTextRes =
+              messageList.add(MessageBaloon(
+                  backgroundColor: Pallete.whiteColor,
+                  text: searchText.toString(),
+                  isAI: false));
+              messageList.add(const MessageBaloon(
+                  backgroundColor: Pallete.whiteColor,
+                  text: 'let me think',
+                  isAI: true));
+              /*  final searchTextRes =
                   await openAIAPI.isImagePromptAPI(searchText!);
               if (searchTextRes.contains('http')) {
                 generatedImageUrl = searchTextRes;
@@ -341,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                 generatedImageUrl = null;
                 setState(() {});
                 await setSpeak(searchTextRes);
-              }
+              }*/
               setState(() {
                 searchText = '';
               });

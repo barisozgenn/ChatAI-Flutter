@@ -14,7 +14,7 @@ class FeatureListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 7).copyWith(right: 7),
+      margin: const EdgeInsets.only(bottom: 7).copyWith(right: 34),
       decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(14).copyWith(

@@ -19,10 +19,10 @@ class MessageBaloon extends StatelessWidget {
     return FadeInRight(
       child: Visibility(
         child: Container(
+          constraints: const BoxConstraints(minWidth: 129, maxWidth: 129),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-          margin: const EdgeInsets.symmetric(
-            horizontal: 14,
-          ).copyWith(top: 14, right: isAI ? 58 : 14, left: !isAI ? 58 : 14),
+          margin: const EdgeInsets.only(bottom: 7),
+          alignment: isAI ? Alignment.centerLeft : Alignment.centerRight,
           decoration: BoxDecoration(
               border: Border.all(color: Pallete.borderColor),
               color: isAI
