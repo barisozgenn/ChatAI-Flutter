@@ -78,20 +78,41 @@ class _HomePageState extends State<HomePage> {
     await flutterTts.speak(content);
   }
 
-  void getAnswer() async {
-    final searchTextRes =
-                  await openAIAPI.isImagePromptAPI(searchText!);
-              if (searchTextRes.contains('http')) {
-                generatedImageUrl = searchTextRes;
-                generatedContent = null;
-                setState(() {});
-              } else {
-                generatedContent = searchTextRes;
-                generatedImageUrl = null;
-                setState(() {});
-                await setSpeak(searchTextRes);
-              }
+  void getAnswer(bool isFromMic) async {
+    if (isFromMic) {
+      if (await speechToText.hasPermission && speechToText.isNotListening) {
+        await startListening();
+      } else if (speechToText.isListening) {
+        final speechRes = await openAIAPI.isImagePromptAPI(lastWords);
+        if (speechRes.contains('http')) {
+          generatedImageUrl = speechRes;
+          generatedContent = null;
+          setState(() {});
+        } else {
+          generatedContent = speechRes;
+          generatedImageUrl = null;
+          setState(() {});
+          await setSpeak(speechRes);
+        }
+        await stopListening();
+      } else {
+        initSpeechToText();
+      }
+    } else {
+      final searchTextRes = await openAIAPI.isImagePromptAPI(searchText!);
+      if (searchTextRes.contains('http')) {
+        generatedImageUrl = searchTextRes;
+        generatedContent = null;
+        setState(() {});
+      } else {
+        generatedContent = searchTextRes;
+        generatedImageUrl = null;
+        setState(() {});
+        await setSpeak(searchTextRes);
+      }
+    }
   }
+
   @override
   void dispose() {
     speechToText.stop();
@@ -332,40 +353,16 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: Pallete.whiteColor,
                   text: searchText.toString(),
                   isAI: false));
-              Future.delayed(const Duration(milliseconds: 792), () {
-                messageList.add(MessageBaloon(
-                    backgroundColor: Pallete.whiteColor,
-                    text: aiAnswer.getQuickAnswer(),
-                    isAI: true));
+            } else {}
 
-                setState(() {});
-              });
+            Future.delayed(const Duration(milliseconds: 792), () {
+              messageList.add(MessageBaloon(
+                  backgroundColor: Pallete.whiteColor,
+                  text: aiAnswer.getQuickAnswer(),
+                  isAI: true));
 
-              /*  */
-              setState(() {
-                searchText = '';
-              });
-            } else {
-              if (await speechToText.hasPermission &&
-                  speechToText.isNotListening) {
-                await startListening();
-              } else if (speechToText.isListening) {
-                final speechRes = await openAIAPI.isImagePromptAPI(lastWords);
-                if (speechRes.contains('http')) {
-                  generatedImageUrl = speechRes;
-                  generatedContent = null;
-                  setState(() {});
-                } else {
-                  generatedContent = speechRes;
-                  generatedImageUrl = null;
-                  setState(() {});
-                  await setSpeak(speechRes);
-                }
-                await stopListening();
-              } else {
-                initSpeechToText();
-              }
-            }
+              setState(() {});
+            });
           },
           backgroundColor: Pallete.secondAssistantCircleColor,
           child: Icon(
