@@ -89,25 +89,58 @@ class _HomePageState extends State<HomePage> {
           generatedContent = null;
           setState(() {});
         } else {
+          Future.delayed(const Duration(milliseconds: 129), () {
+            messageList.add(MessageBaloon(
+                backgroundColor: Pallete.whiteColor,
+                text: aiAnswer.getQuickAnswer(),
+                isAI: true));
+
+            setState(() {});
+          });
           generatedContent = speechRes;
           generatedImageUrl = null;
           setState(() {});
           await setSpeak(speechRes);
+          messageList.add(MessageBaloon(
+            backgroundColor: Pallete.whiteColor,
+            isAI: true,
+            text: generatedContent!,
+          ));
         }
         await stopListening();
       } else {
         initSpeechToText();
       }
     } else {
+      Future.delayed(const Duration(milliseconds: 792), () {
+        messageList.add(MessageBaloon(
+            backgroundColor: Pallete.whiteColor,
+            text: aiAnswer.getQuickAnswer(),
+            isAI: true));
+
+        setState(() {});
+      });
+
       final searchTextRes = await openAIAPI.isImagePromptAPI(searchText!);
       if (searchTextRes.contains('http')) {
         generatedImageUrl = searchTextRes;
         generatedContent = null;
+        messageList.add(MessageBaloon(
+          backgroundColor: Pallete.whiteColor,
+          imageUrl: generatedImageUrl,
+          isAI: true,
+          text: '',
+        ));
         setState(() {});
       } else {
         generatedContent = searchTextRes;
         generatedImageUrl = null;
         setState(() {});
+        messageList.add(MessageBaloon(
+          backgroundColor: Pallete.whiteColor,
+          isAI: true,
+          text: generatedContent!,
+        ));
         await setSpeak(searchTextRes);
       }
     }
@@ -198,9 +231,7 @@ class _HomePageState extends State<HomePage> {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  generatedContent == null
-                                      ? 'What can I do for you today?'
-                                      : '👤: $lastWords',
+                                  'What can I do for you today?',
                                   style: TextStyle(
                                       fontFamily: 'Cera Pro',
                                       color: Pallete.mainFontColor,
@@ -216,9 +247,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    generatedContent == null
-                                        ? 'Your Personal AI Assistant'
-                                        : '🤖: ${generatedContent!}',
+                                    'Your Personal AI Assistant',
                                     style: TextStyle(
                                         fontFamily: 'Cera Pro',
                                         color: Pallete.mainFontColor,
@@ -243,10 +272,7 @@ class _HomePageState extends State<HomePage> {
                   // features list
                   SlideInRight(
                     child: Visibility(
-                      visible: (generatedContent != null ||
-                              generatedImageUrl != null)
-                          ? false
-                          : true,
+                      visible: true,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             vertical: 7, horizontal: 14),
@@ -268,10 +294,7 @@ class _HomePageState extends State<HomePage> {
                     margin:
                         const EdgeInsets.only(top: 14.0, right: 14, left: 14),
                     child: Visibility(
-                      visible: (generatedContent != null ||
-                              generatedImageUrl != null)
-                          ? false
-                          : true,
+                      visible: true,
                       child: Column(
                         children: [
                           FadeInRight(
@@ -353,16 +376,14 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: Pallete.whiteColor,
                   text: searchText.toString(),
                   isAI: false));
-            } else {}
-
-            Future.delayed(const Duration(milliseconds: 792), () {
-              messageList.add(MessageBaloon(
-                  backgroundColor: Pallete.whiteColor,
-                  text: aiAnswer.getQuickAnswer(),
-                  isAI: true));
-
-              setState(() {});
-            });
+              getAnswer(false);
+            } else {
+              if (await speechToText.hasPermission == false) {
+                initSpeechToText();
+              } else {
+                getAnswer(true);
+              }
+            }
           },
           backgroundColor: Pallete.secondAssistantCircleColor,
           child: Icon(
