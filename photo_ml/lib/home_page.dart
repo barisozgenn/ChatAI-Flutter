@@ -25,12 +25,14 @@ class _HomePageState extends State<HomePage> {
   String? searchText;
   int animDelay = 129;
   List<MessageBaloon> messageList = <MessageBaloon>[];
+  double screenWidth = 0;
 
   @override
   void initState() {
     super.initState();
     initSpeechToText();
     initTextToSpeech();
+    screenWidth = 200; //MediaQuery.of(context).size.width;
   }
 
   Future<void> initSpeechToText() async {

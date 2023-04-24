@@ -7,6 +7,7 @@ class MessageBaloon extends StatelessWidget {
   final String text;
   final String? imageUrl;
   final bool isAI;
+
   const MessageBaloon(
       {super.key,
       required this.backgroundColor,
@@ -19,13 +20,17 @@ class MessageBaloon extends StatelessWidget {
     return FadeInRight(
       child: Visibility(
         child: Align(
-          alignment: isAI ? Alignment.centerLeft : Alignment.centerRight,
-          child: Flexible(
-            child: Container(
-              width: text.length < 29 ? 229 : double.infinity,
+          child: Row(children: [
+            if (!isAI) const Spacer(),
+            Container(
+              constraints: BoxConstraints.loose(Size.infinite),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-              margin: const EdgeInsets.only(bottom: 7)
-                  .copyWith(left: isAI ? 0 : 29, right: isAI ? 29 : 0),
+              margin: const EdgeInsets.only(bottom: 7),
+              width: text.length < 29
+                  ? 192
+                  : imageUrl == null
+                      ? 292
+                      : 329,
               decoration: BoxDecoration(
                   border: Border.all(color: Pallete.borderColor),
                   color: isAI
@@ -58,7 +63,6 @@ class MessageBaloon extends StatelessWidget {
                             fontFamily: 'Cera Pro',
                             color: Pallete.mainFontColor,
                             fontSize: 12,
-                            backgroundColor: Pallete.secondAssistantCircleColor,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -92,7 +96,7 @@ class MessageBaloon extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          ]),
         ),
       ),
     );
