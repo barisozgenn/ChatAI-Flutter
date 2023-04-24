@@ -15,6 +15,18 @@ class MessageBaloon extends StatelessWidget {
       required this.isAI,
       this.imageUrl});
 
+  double getBaloonWidth() {
+    if (imageUrl != null) {
+      return 372;
+    } else if (text.length < 29) {
+      return 192;
+    } else if (text.length < 92) {
+      return 329;
+    } else {
+      return 372;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FadeInRight(
@@ -26,11 +38,7 @@ class MessageBaloon extends StatelessWidget {
               constraints: BoxConstraints.loose(Size.infinite),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
               margin: const EdgeInsets.only(bottom: 7),
-              width: text.length < 29
-                  ? 192
-                  : imageUrl == null
-                      ? 292
-                      : 329,
+              width: getBaloonWidth(),
               decoration: BoxDecoration(
                   border: Border.all(color: Pallete.borderColor),
                   color: isAI

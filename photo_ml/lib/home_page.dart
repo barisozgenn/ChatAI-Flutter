@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
   Future<void> stopListening() async {
-    final speechRes = await openAIAPI.isImagePromptAPI(lastWords);
+    final speechRes = await openAIAPI.makeAPICall(lastWords);
     print(speechRes);
     await speechToText.stop();
     setState(() {});
@@ -83,13 +83,18 @@ class _HomePageState extends State<HomePage> {
       if (await speechToText.hasPermission && speechToText.isNotListening) {
         await startListening();
       } else if (speechToText.isListening) {
-        final speechRes = await openAIAPI.isImagePromptAPI(lastWords);
+        final speechRes = await openAIAPI.makeAPICall(lastWords);
         if (speechRes.contains('http')) {
           generatedImageUrl = speechRes;
           generatedContent = null;
           setState(() {});
         } else {
-          Future.delayed(const Duration(milliseconds: 129), () {
+          messageList.add(MessageBaloon(
+            backgroundColor: Pallete.whiteColor,
+            isAI: true,
+            text: speechRes,
+          ));
+          Future.delayed(const Duration(milliseconds: 29), () {
             messageList.add(MessageBaloon(
                 backgroundColor: Pallete.whiteColor,
                 text: aiAnswer.getQuickAnswer(),
@@ -121,7 +126,7 @@ class _HomePageState extends State<HomePage> {
         setState(() {});
       });
 
-      final searchTextRes = await openAIAPI.isImagePromptAPI(searchText!);
+      final searchTextRes = await openAIAPI.makeAPICall(searchText!);
       if (searchTextRes.contains('http')) {
         generatedImageUrl = searchTextRes;
         generatedContent = null;

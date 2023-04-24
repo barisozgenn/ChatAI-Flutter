@@ -8,48 +8,20 @@ import '../constants/constants.dart';
 class OpenAIAPI {
   final List<Map<String, String>> messages = [];
 
-  Future<String> isImagePromptAPI(String prompt) async {
-    try {
-      final res = await http.post(
-        Uri.parse(openAIAPIURL),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $openAIAPIKey',
-        },
-        body: jsonEncode({
-          "model": "gpt-3.5-turbo",
-          "messages": [
-            {
-              'role': 'user',
-              'content': 'This message is image content? $prompt : Yes or No',
-            }
-          ]
-        }),
-      );
-      if (kDebugMode) {
-        print(res.body);
-        if (res.statusCode == 200) {
-          String resContent =
-              jsonDecode(res.body)['choices'][0]['message']['content'];
-          resContent = resContent.trim();
-          switch (resContent.toLowerCase()) {
-            case 'yes':
-            case 'yes.':
-              final apiRes = await dallEAPI(prompt);
-              return apiRes;
-            default:
-              return await chatGPTAPI(prompt);
-          }
-        }
-      }
-
-      return 'Some errors occured! Baris';
-    } catch (ex) {
-      return ex.toString();
+  Future<String> makeAPICall(String prompt) async {
+    if (prompt.contains('photo') ||
+        prompt.contains('image') ||
+        prompt.contains('art')) {
+      return await dallEAPI(prompt);
+    } else {
+      return await chatGPTAPI(prompt);
     }
   }
 
   Future<String> chatGPTAPI(String prompt) async {
+    if (kDebugMode) {
+      print('prompt: $prompt');
+    }
     messages.add({
       'role': 'user',
       'content': prompt,
@@ -80,12 +52,13 @@ class OpenAIAPI {
           'role': 'assistant',
           'content': resContent,
         });
-
+        print('resContent: $resContent');
         return resContent;
       }
 
-      return 'Some errors occured! Baris';
+      return 'Some errors occured! Baris chat GPT';
     } catch (ex) {
+      print('error: $ex');
       return ex.toString();
     }
   }
@@ -119,7 +92,7 @@ class OpenAIAPI {
         return resImageUrl;
       }
 
-      return 'Some errors occured! Baris';
+      return 'Some errors occured! Baris IMG';
     } catch (ex) {
       return ex.toString();
     }
