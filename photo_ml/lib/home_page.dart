@@ -8,6 +8,8 @@ import 'package:photo_ml/theme/pallette.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
+import 'model/ai_answer_model.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -17,6 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final OpenAIAPI openAIAPI = OpenAIAPI();
+  final AIAnswerModel aiAnswer = AIAnswerModel();
   final speechToText = SpeechToText();
   final flutterTts = FlutterTts();
   String lastWords = '';
@@ -75,6 +78,20 @@ class _HomePageState extends State<HomePage> {
     await flutterTts.speak(content);
   }
 
+  void getAnswer() async {
+    final searchTextRes =
+                  await openAIAPI.isImagePromptAPI(searchText!);
+              if (searchTextRes.contains('http')) {
+                generatedImageUrl = searchTextRes;
+                generatedContent = null;
+                setState(() {});
+              } else {
+                generatedContent = searchTextRes;
+                generatedImageUrl = null;
+                setState(() {});
+                await setSpeak(searchTextRes);
+              }
+  }
   @override
   void dispose() {
     speechToText.stop();
@@ -315,22 +332,16 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: Pallete.whiteColor,
                   text: searchText.toString(),
                   isAI: false));
-              messageList.add(const MessageBaloon(
-                  backgroundColor: Pallete.whiteColor,
-                  text: 'let me think',
-                  isAI: true));
-              /*  final searchTextRes =
-                  await openAIAPI.isImagePromptAPI(searchText!);
-              if (searchTextRes.contains('http')) {
-                generatedImageUrl = searchTextRes;
-                generatedContent = null;
+              Future.delayed(const Duration(milliseconds: 792), () {
+                messageList.add(MessageBaloon(
+                    backgroundColor: Pallete.whiteColor,
+                    text: aiAnswer.getQuickAnswer(),
+                    isAI: true));
+
                 setState(() {});
-              } else {
-                generatedContent = searchTextRes;
-                generatedImageUrl = null;
-                setState(() {});
-                await setSpeak(searchTextRes);
-              }*/
+              });
+
+              /*  */
               setState(() {
                 searchText = '';
               });
