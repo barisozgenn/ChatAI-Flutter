@@ -1,15 +1,13 @@
 import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-
 import '../constants/constants.dart';
 
 class OpenAIAPI {
   final List<Map<String, String>> messages = [];
 
   Future<String> makeAPICall(String prompt) async {
-    if (prompt.contains('photo') ||
+    if (prompt.contains('picture') ||
+        prompt.contains('photo') ||
         prompt.contains('image') ||
         prompt.contains('art')) {
       return await dallEAPI(prompt);
@@ -19,47 +17,37 @@ class OpenAIAPI {
   }
 
   Future<String> chatGPTAPI(String prompt) async {
-    if (kDebugMode) {
-      print('prompt: $prompt');
-    }
     messages.add({
       'role': 'user',
       'content': prompt,
     });
     try {
-      final res = await http.post(
-        Uri.parse(openAIAPIURL),
+      final resGPT = await http.post(
+        Uri.parse('https://api.openai.com/v1/chat/completions'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $openAIAPIKey',
         },
         body: jsonEncode({
           "model": "gpt-3.5-turbo",
-          "messages": [
-            {
-              'role': 'user',
-              'content': messages,
-            }
-          ]
+          "messages": messages,
         }),
       );
-      if (res.statusCode == 200) {
-        String resContent =
-            jsonDecode(res.body)['choices'][0]['message']['content'];
-        resContent = resContent.trim();
+
+      if (resGPT.statusCode == 200) {
+        String content =
+            jsonDecode(resGPT.body)['choices'][0]['message']['content'];
+        content = content.trim();
 
         messages.add({
           'role': 'assistant',
-          'content': resContent,
+          'content': content,
         });
-        print('resContent: $resContent');
-        return resContent;
+        return content;
       }
-
-      return 'Some errors occured! Baris chat GPT';
-    } catch (ex) {
-      print('error: $ex');
-      return ex.toString();
+      return 'Some errors occured! Baris chatGPT';
+    } catch (e) {
+      return e.toString();
     }
   }
 
