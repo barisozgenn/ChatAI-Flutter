@@ -18,10 +18,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final OpenAIAPI openAIAPI = OpenAIAPI();
-  final AIAnswerModel aiAnswer = AIAnswerModel();
+  final openAIAPI = OpenAIAPI();
+  final aiAnswer = AIAnswerModel();
   final speechToText = SpeechToText();
   final flutterTts = FlutterTts();
+  final scrollController = ScrollController();
+  final textEditingController = TextEditingController();
+
   String lastWords = '';
   String? generatedContent;
   String? generatedImageUrl;
@@ -55,8 +58,7 @@ class _HomePageState extends State<HomePage> {
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
   Future<void> stopListening() async {
-    final speechRes = await openAIAPI.makeAPICall(lastWords);
-    print(speechRes);
+    await openAIAPI.makeAPICall(lastWords);
     await speechToText.stop();
     setState(() {});
   }
@@ -78,7 +80,17 @@ class _HomePageState extends State<HomePage> {
     await flutterTts.speak(content);
   }
 
+  void scrollDown() {
+    //scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
   void getAnswer(bool isFromMic) async {
+    textEditingController.clear();
     if (isFromMic) {
       if (await speechToText.hasPermission && speechToText.isNotListening) {
         await startListening();
@@ -94,7 +106,7 @@ class _HomePageState extends State<HomePage> {
             isAI: true,
             text: speechRes,
           ));
-          Future.delayed(const Duration(milliseconds: 29), () {
+          Future.delayed(const Duration(milliseconds: 729), () {
             messageList.add(MessageBaloon(
                 backgroundColor: Pallete.whiteColor,
                 text: aiAnswer.getQuickAnswer(),
@@ -137,6 +149,7 @@ class _HomePageState extends State<HomePage> {
           text: '',
         ));
         setState(() {});
+        scrollDown();
       } else {
         generatedContent = searchTextRes;
         generatedImageUrl = null;
@@ -147,6 +160,7 @@ class _HomePageState extends State<HomePage> {
           text: generatedContent!,
         ));
         await setSpeak(searchTextRes);
+        scrollDown();
       }
     }
   }
@@ -207,6 +221,7 @@ class _HomePageState extends State<HomePage> {
         child: Stack(
           children: [
             SingleChildScrollView(
+              controller: scrollController,
               padding: const EdgeInsets.only(bottom: 129),
               child: Column(
                 children: [
@@ -227,8 +242,8 @@ class _HomePageState extends State<HomePage> {
                                 topLeft: const Radius.circular(29))),
                         child: Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
+                            const Padding(
+                              padding: EdgeInsets.only(
                                 left: 7,
                                 top: 14,
                                 bottom: 0,
@@ -240,14 +255,13 @@ class _HomePageState extends State<HomePage> {
                                   style: TextStyle(
                                       fontFamily: 'Cera Pro',
                                       color: Pallete.mainFontColor,
-                                      fontSize:
-                                          generatedContent == null ? 14 : 12),
+                                      fontSize: 14),
                                 ),
                               ),
                             ),
                             if (generatedImageUrl == null)
-                              Padding(
-                                padding: const EdgeInsets.only(
+                              const Padding(
+                                padding: EdgeInsets.only(
                                     left: 7, bottom: 14, top: 0),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
@@ -256,18 +270,9 @@ class _HomePageState extends State<HomePage> {
                                     style: TextStyle(
                                         fontFamily: 'Cera Pro',
                                         color: Pallete.mainFontColor,
-                                        fontSize:
-                                            generatedContent == null ? 24 : 14),
+                                        fontSize: 24),
                                   ),
                                 ),
-                              ),
-                            // image generated
-                            if (generatedImageUrl != null)
-                              Padding(
-                                padding: const EdgeInsets.all(7.0),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(4),
-                                    child: Image.network(generatedImageUrl!)),
                               ),
                           ],
                         ),
@@ -338,6 +343,7 @@ class _HomePageState extends State<HomePage> {
                     .copyWith(bottom: 50),
                 alignment: Alignment.bottomCenter,
                 child: TextFormField(
+                  controller: textEditingController,
                   onChanged: (text) {
                     setState(() {
                       searchText = text;
