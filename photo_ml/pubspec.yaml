@@ -39,10 +39,18 @@ dependencies:
   http: ^0.13.5
   flutter_tts: ^3.6.3
   animate_do: ^3.0.2
+  flutter_native_splash: ^2.2.19
+  video_player: ^2.2.19
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+ 
+flutter_native_splash:
+  image: assets/images/aiAssistant.png
+  color: "#f7f7f7"
+  image_dark: assets/images/aiAssistant.png
+  color_dark: "#141414"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
