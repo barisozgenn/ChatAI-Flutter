@@ -81,12 +81,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void scrollDown() {
-    //scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
-      curve: Curves.easeOut,
-      duration: const Duration(milliseconds: 300),
-    );
+    scrollController.jumpTo(scrollController.position.maxScrollExtent);
   }
 
   void getAnswer(bool isFromMic) async {
@@ -106,13 +101,15 @@ class _HomePageState extends State<HomePage> {
             isAI: true,
             text: speechRes,
           ));
-          Future.delayed(const Duration(milliseconds: 729), () {
-            messageList.add(MessageBaloon(
-                backgroundColor: Pallete.whiteColor,
-                text: aiAnswer.getQuickAnswer(),
-                isAI: true));
+          Future.delayed(const Duration(milliseconds: 392), () {
+            setState(() {
+              messageList.add(MessageBaloon(
+                  backgroundColor: Pallete.whiteColor,
+                  text: aiAnswer.getQuickAnswer(),
+                  isAI: true));
 
-            setState(() {});
+              scrollDown();
+            });
           });
           generatedContent = speechRes;
           generatedImageUrl = null;
@@ -129,15 +126,18 @@ class _HomePageState extends State<HomePage> {
         initSpeechToText();
       }
     } else {
-      Future.delayed(const Duration(milliseconds: 792), () {
-        messageList.add(MessageBaloon(
-            backgroundColor: Pallete.whiteColor,
-            text: aiAnswer.getQuickAnswer(),
-            isAI: true));
+      Future.delayed(const Duration(milliseconds: 392), () {
+        setState(() {
+          messageList.add(MessageBaloon(
+              backgroundColor: Pallete.whiteColor,
+              text: aiAnswer.getQuickAnswer(),
+              isAI: true));
 
-        setState(() {});
+          scrollDown();
+        });
       });
 
+      setState(() {});
       final searchTextRes = await openAIAPI.makeAPICall(prompt: searchText!);
       if (searchTextRes.contains('http')) {
         generatedImageUrl = searchTextRes;
@@ -148,8 +148,9 @@ class _HomePageState extends State<HomePage> {
           isAI: true,
           text: '',
         ));
-        setState(() {});
-        scrollDown();
+        setState(() {
+          scrollDown();
+        });
       } else {
         generatedContent = searchTextRes;
         generatedImageUrl = null;
