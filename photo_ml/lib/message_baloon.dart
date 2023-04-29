@@ -42,8 +42,8 @@ class MessageBaloon extends StatelessWidget {
               decoration: BoxDecoration(
                   border: Border.all(color: Pallete.borderColor),
                   color: isAI
-                      ? const Color.fromARGB(255, 255, 255, 255)
-                      : const Color.fromARGB(255, 233, 233, 233),
+                      ? const Color.fromARGB(255, 229, 229, 233)
+                      : const Color.fromARGB(255, 0, 122, 255),
                   borderRadius: BorderRadius.circular(14).copyWith(
                       bottomLeft:
                           isAI ? Radius.zero : const Radius.circular(14),
@@ -67,9 +67,11 @@ class MessageBaloon extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         isAI ? 'AI' : 'You',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: 'Cera Pro',
-                            color: Pallete.mainFontColor,
+                            color: isAI
+                                ? Pallete.mainFontColor
+                                : Pallete.whiteColor,
                             fontSize: 12,
                             fontWeight: FontWeight.bold),
                       ),
@@ -85,9 +87,11 @@ class MessageBaloon extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         text,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: 'Cera Pro',
-                            color: Pallete.mainFontColor,
+                            color: isAI
+                                ? Pallete.mainFontColor
+                                : Pallete.whiteColor,
                             fontSize: 15),
                       ),
                     ),

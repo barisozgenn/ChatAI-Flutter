@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                         ).copyWith(top: 29, right: 34),
                         decoration: BoxDecoration(
                             border: Border.all(color: Pallete.borderColor),
-                            color: const Color.fromARGB(255, 255, 255, 255),
+                            color: Color.fromARGB(255, 229, 229, 233),
                             borderRadius: BorderRadius.circular(14).copyWith(
                                 bottomLeft: Radius.zero,
                                 topLeft: const Radius.circular(29))),
