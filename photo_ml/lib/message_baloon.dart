@@ -1,4 +1,6 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:chat_bubbles/bubbles/bubble_normal_image.dart';
+import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:photo_ml/theme/pallette.dart';
 
@@ -34,83 +36,48 @@ class MessageBaloon extends StatelessWidget {
         child: Align(
           child: Row(children: [
             if (!isAI) const Spacer(),
-            Container(
-              constraints: BoxConstraints.loose(Size.infinite),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-              margin: const EdgeInsets.only(bottom: 7),
-              width: getBaloonWidth(),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Pallete.borderColor),
-                  color: isAI
-                      ? const Color.fromARGB(255, 229, 229, 233)
-                      : const Color.fromARGB(255, 0, 122, 255),
-                  borderRadius: BorderRadius.circular(14).copyWith(
-                      bottomLeft:
-                          isAI ? Radius.zero : const Radius.circular(14),
-                      bottomRight:
-                          !isAI ? Radius.zero : const Radius.circular(14),
-                      topRight: !isAI
-                          ? const Radius.circular(29)
-                          : const Radius.circular(14),
-                      topLeft: isAI
-                          ? const Radius.circular(29)
-                          : const Radius.circular(14))),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 7,
-                      top: 7,
-                      bottom: 0,
-                    ),
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        isAI ? 'AI' : 'You',
-                        style: TextStyle(
-                            fontFamily: 'Cera Pro',
-                            color: isAI
-                                ? Pallete.mainFontColor
-                                : Pallete.whiteColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+            if (imageUrl != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: Container(
+                  margin: EdgeInsets.only(left: 14),
+                  width: 372,
+                  color: Color.fromARGB(255, 229, 229, 233),
+                  child: Padding(
+                    padding: const EdgeInsets.all(7.0),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Image.network(imageUrl!)),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 7,
-                      top: 7,
-                      bottom: 7,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        text,
-                        style: TextStyle(
-                            fontFamily: 'Cera Pro',
-                            color: isAI
-                                ? Pallete.mainFontColor
-                                : Pallete.whiteColor,
-                            fontSize: 15),
-                      ),
-                    ),
-                  ),
-
-                  // image generated
-                  if (imageUrl != null)
-                    Padding(
-                      padding: const EdgeInsets.all(7.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Image.network(imageUrl!)),
-                    ),
-                ],
+                ),
               ),
-            ),
+            if (imageUrl == null)
+              Container(
+                margin: EdgeInsets.only(bottom: 7),
+                child: BubbleSpecialThree(
+                  text: text,
+                  color: isAI
+                      ? Color.fromARGB(255, 229, 229, 233)
+                      : Color.fromARGB(255, 0, 122, 255),
+                  tail: true,
+                  isSender: isAI ? false : true,
+                  textStyle: TextStyle(
+                    color: isAI ? Pallete.blackColor : Pallete.whiteColor,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
           ]),
         ),
       ),
     );
   }
 }
+/**image generated
+                  if (imageUrl != null)
+                    Padding(
+                      padding: const EdgeInsets.all(7.0),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: Image.network(imageUrl!)),
+                    ), */

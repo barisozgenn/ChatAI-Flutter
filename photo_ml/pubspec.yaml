@@ -41,6 +41,7 @@ dependencies:
   animate_do: ^3.0.2
   flutter_native_splash: ^2.2.19
   video_player: ^2.2.19
+  chat_bubbles: ^1.4.1
 
 dev_dependencies:
   flutter_test:
