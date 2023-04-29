@@ -3,26 +3,26 @@ import 'package:http/http.dart' as http;
 import '../constants/constants.dart';
 
 class OpenAIAPI {
-  final List<Map<String, String>> messages = [];
+  final List<Map<String, String>> _chatMessages = [];
 
-  Future<String> makeAPICall(String prompt) async {
+  Future<String> makeAPICall({required String prompt}) async {
     if (prompt.contains('picture') ||
         prompt.contains('photo') ||
         prompt.contains('image') ||
         prompt.contains('art')) {
-      return await dallEAPI(prompt);
+      return await _dallEAPI(prompt: prompt);
     } else {
-      return await chatGPTAPI(prompt);
+      return await _chatGPTAPI(prompt: prompt);
     }
   }
 
-  Future<String> chatGPTAPI(String prompt) async {
-    messages.add({
+  Future<String> _chatGPTAPI({required String prompt}) async {
+    _chatMessages.add({
       'role': 'user',
       'content': prompt,
     });
     try {
-      final resGPT = await http.post(
+      final response = await http.post(
         Uri.parse('https://api.openai.com/v1/chat/completions'),
         headers: {
           'Content-Type': 'application/json',
@@ -30,34 +30,34 @@ class OpenAIAPI {
         },
         body: jsonEncode({
           "model": "gpt-3.5-turbo",
-          "messages": messages,
+          "messages": _chatMessages,
         }),
       );
 
-      if (resGPT.statusCode == 200) {
+      if (response.statusCode == 200) {
         String content =
-            jsonDecode(resGPT.body)['choices'][0]['message']['content'];
+            jsonDecode(response.body)['choices'][0]['message']['content'];
         content = content.trim();
 
-        messages.add({
+        _chatMessages.add({
           'role': 'assistant',
           'content': content,
         });
         return content;
       }
-      return 'Some errors occured! Baris chatGPT';
+      throw Exception('Failed to call ChatGPT API');
     } catch (e) {
-      return e.toString();
+      throw Exception('Failed to call ChatGPT API: $e');
     }
   }
 
-  Future<String> dallEAPI(String prompt) async {
-    messages.add({
+  Future<String> _dallEAPI({required String prompt}) async {
+    _chatMessages.add({
       'role': 'user',
       'content': prompt,
     });
     try {
-      final res = await http.post(
+      final response = await http.post(
         Uri.parse(openAIImageAPIURL),
         headers: {
           'Content-Type': 'application/json',
@@ -68,11 +68,11 @@ class OpenAIAPI {
           'n': 1,
         }),
       );
-      if (res.statusCode == 200) {
-        String resImageUrl = jsonDecode(res.body)['data'][0]['url'];
+      if (response.statusCode == 200) {
+        String resImageUrl = jsonDecode(response.body)['data'][0]['url'];
         resImageUrl = resImageUrl.trim();
 
-        messages.add({
+        _chatMessages.add({
           'role': 'assistant',
           'content': resImageUrl,
         });
@@ -80,9 +80,9 @@ class OpenAIAPI {
         return resImageUrl;
       }
 
-      return 'Some errors occured! Baris IMG';
-    } catch (ex) {
-      return ex.toString();
+      throw Exception('Failed to call Dall-E API');
+    } catch (e) {
+      throw Exception('Failed to call Dall-E API: $e');
     }
   }
 }

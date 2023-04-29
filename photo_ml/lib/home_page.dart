@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   /// and the SpeechToText plugin supports setting timeouts on the
   /// listen method.
   Future<void> stopListening() async {
-    await openAIAPI.makeAPICall(lastWords);
+    await openAIAPI.makeAPICall(prompt: lastWords);
     await speechToText.stop();
     setState(() {});
   }
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
       if (await speechToText.hasPermission && speechToText.isNotListening) {
         await startListening();
       } else if (speechToText.isListening) {
-        final speechRes = await openAIAPI.makeAPICall(lastWords);
+        final speechRes = await openAIAPI.makeAPICall(prompt: lastWords);
         if (speechRes.contains('http')) {
           generatedImageUrl = speechRes;
           generatedContent = null;
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
         setState(() {});
       });
 
-      final searchTextRes = await openAIAPI.makeAPICall(searchText!);
+      final searchTextRes = await openAIAPI.makeAPICall(prompt: searchText!);
       if (searchTextRes.contains('http')) {
         generatedImageUrl = searchTextRes;
         generatedContent = null;
